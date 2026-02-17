@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CGPA Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px;
+            width: 450px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        h2, h3 {
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+            text-align: center;
+            padding: 8px;
+        }
+
+        .result {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .grade-chart {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>CGPA Calculator</h2>
+
+    <label>Enter marks for subjects:</label>
+    <input type="number" class="marks" placeholder="Subject 1 marks">
+    <input type="number" class="marks" placeholder="Subject 2 marks">
+    <input type="number" class="marks" placeholder="Subject 3 marks">
+    <input type="number" class="marks" placeholder="Subject 4 marks">
+    <input type="number" class="marks" placeholder="Subject 5 marks">
+
+    <button onclick="calculateCGPA()">Calculate CGPA</button>
+
+    <table id="resultTable">
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Marks</th>
+                <th>Grade</th>
+                <th>Grade Point</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <div class="result" id="cgpaResult"></div>
+
+    <div class="grade-chart">
+        <h3>Grade Chart</h3>
+        <table>
+            <tr><th>Marks</th><th>Grade</th><th>Point</th></tr>
+            <tr><td>90–100</td><td>O</td><td>10</td></tr>
+            <tr><td>80–89</td><td>A+</td><td>9</td></tr>
+            <tr><td>70–79</td><td>A</td><td>8</td></tr>
+            <tr><td>65–69</td><td>B+</td><td>7</td></tr>
+            <tr><td>60–64</td><td>B</td><td>6</td></tr>
+            <tr><td>&lt; 60</td><td>F</td><td>0</td></tr>
+        </table>
+    </div>
+</div>
+
+<script>
+function getGrade(marks) {
+    if (marks >= 90) return ["O", 10];
+    else if (marks >= 80) return ["A+", 9];
+    else if (marks >= 70) return ["A", 8];
+    else if (marks >= 65) return ["B+", 7];
+    else if (marks >= 60) return ["B", 6];
+    else return ["F", 0];
+}
+
+function calculateCGPA() {
+    let inputs = document.querySelectorAll(".marks");
+    let tbody = document.querySelector("#resultTable tbody");
+    tbody.innerHTML = "";
+
+    let totalPoints = 0;
+    let count = 0;
+
+    inputs.forEach((input, index) => {
+        let marks = Number(input.value);
+        if (marks >= 0 && marks <= 100) {
+            let [grade, point] = getGrade(marks);
+            totalPoints += point;
+            count++;
+
+            let row = `<tr>
+                <td>Subject ${index + 1}</td>
+                <td>${marks}</td>
+                <td>${grade}</td>
+                <td>${point}</td>
+            </tr>`;
+            tbody.innerHTML += row;
+        }
+    });
+
+    let cgpa = count > 0 ? (totalPoints / count).toFixed(2) : 0;
+    document.getElementById("cgpaResult").innerText = "Final CGPA: " + cgpa;
+}
+</script>
+
+</body>
+</html>
